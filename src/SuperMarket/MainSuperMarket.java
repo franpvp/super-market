@@ -21,6 +21,7 @@ public class MainSuperMarket {
         //Ingresar Código
         boolean continuar = ingresarProd();
         //Ingreso Descripción
+        //COMENTARIO PRUEBA
         while (continuar){
             ingresarDesc();
             break;
