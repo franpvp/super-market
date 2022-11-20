@@ -1,106 +1,40 @@
 package SuperMarket;
 
+import jdk.nashorn.internal.objects.Global;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MainSuperMarket {
 
+    //public static Producto producto;
+    public static ArrayList<Producto> listaProductos = new ArrayList<>();
+
+
     public static void main(String[] args) {
+
         Producto producto = new Producto();
-        Scanner scanner = new Scanner(System.in);
-        ArrayList<Producto> listaProducts = new ArrayList<>();
+        //ArrayList<Producto> listaProducts = new ArrayList<>();
         int numCod = 0;
         int precioProd = 0;
         int cantProd = 0;
-        int intentosCod = 0;
-        int intentosDesc = 0;
-        int intentosPrecio = 0;
-        int intentosCant = 0;
 
         //Ingresar Código
-        boolean continuar = true;
-        System.out.println("Ingrese un codigo: ");
-        String codProd = scanner.nextLine();
-        producto.setCodProd(codProd);
-        while (true){
-            if (codProd.isEmpty()) {
-                System.out.println("Debe ingresar un codigo: ");
-                codProd = scanner.nextLine();
-                intentosCod += 1;
-                if (intentosCod == 2) {
-                    System.out.println("Ha sobrepasado la cantidad maxima de intentos. ¡Adios!");
-                    continuar = false;
-                    break;
-                }
-            }
-            if (isNumeric(codProd) == true) {
-                numCod = Integer.parseInt(codProd);
-                break;
-            }
-        }
+        boolean continuar = ingresarProd();
         //Ingreso Descripción
         while (continuar){
-            System.out.println("Ingrese descripcion: ");
-            String desc = scanner.nextLine();
-            producto.setDesc(desc);
-            while (true){
-                if (desc.isEmpty()) {
-                    System.out.println("Debe ingresar una descripcion: ");
-                    desc = scanner.nextLine();
-                    intentosDesc += 1;
-                    if (intentosDesc == 2) {
-                        System.out.println("Ha sobrepasado la cantidad maxima de intentos. ¡Adios!");
-                        continuar = false;
-                        break;
-                    }
-                }else {
-                    continuar = true;
-                    break;
-                }
-            }break;
+            ingresarDesc();
+            break;
         }
         //Ingrese Precio
         while (continuar) {
-            System.out.println("Ingrese precio: ");
-            String precio = scanner.nextLine();
-            producto.setPrecio(precio);
-            while (true) {
-                if (precio.isEmpty()) {
-                    System.out.println("Debe ingresar un precio: ");
-                    precio = scanner.nextLine();
-                    intentosPrecio += 1;
-                    if (intentosPrecio == 2) {
-                        System.out.println("Ha sobrepasado la cantidad máxima de intentos. ¡Adios!");
-                        continuar = false;
-                        break;
-                    }
-                }
-                if (isNumeric(precio) == true) {
-                    precioProd = Integer.parseInt(precio);
-                    break;
-                }
-            }break;
+            ingresarPrecio();
+            break;
         }
         //Ingrese cantidad
         while (continuar){
-            System.out.println("Ingrese cantidad: ");
-            String cant = scanner.nextLine();
-            while (true){
-                if (cant.isEmpty()) {
-                    System.out.println("Debe ingresar una cantidad: ");
-                    cant = scanner.nextLine();
-                    intentosCant += 1;
-                    if (intentosCant == 2) {
-                        System.out.println("Ha sobrepasado la cantidad maxima de intentos. ¡Adios!");
-                        continuar = false;
-                        break;
-                    }
-                }
-                if (isNumeric(cant) == true) {
-                    cantProd = Integer.parseInt(cant);
-                    break;
-                }
-            }break;
+            ingresarCant();
+            break;
         }
         while (continuar){
             System.out.println("--- Datos del producto ---");
@@ -115,8 +49,8 @@ public class MainSuperMarket {
             boolean addProd = addProducto();
             if (addProd){
                 System.out.println("Agregando nuevo producto");
-                listaProducts.add(producto);
-                System.out.println(listaProducts);
+                listaProductos.add(producto);
+                System.out.println(listaProductos);
                 break;
             } else if (!addProd){
                 System.out.println("Finalizando el programa");
@@ -126,11 +60,14 @@ public class MainSuperMarket {
 
     }
 
-    //Ingresar codigo del producto
-    public static String ingresarCodigo(){
+    //Métodos
+    //Ingresar código del producto
+    public static boolean ingresarProd(){
 
         Scanner scanner = new Scanner(System.in);
         Producto producto = new Producto();
+
+        boolean continuar = true;
         int intentosCod = 0;
         int numCod = 0;
 
@@ -138,12 +75,13 @@ public class MainSuperMarket {
         String codProd = scanner.nextLine();
         producto.setCodProd(codProd);
         while (true){
-            if (codProd.isEmpty()) {
-                System.out.println("Debe ingresar un codigo: ");
+            if (codProd.isEmpty() && intentosCod != 2) {
+                System.out.println("Debe ingresar un código: ");
                 codProd = scanner.nextLine();
                 intentosCod += 1;
                 if (intentosCod == 2) {
                     System.out.println("Ha sobrepasado la cantidad maxima de intentos. ¡Adios!");
+                    continuar = false;
                     break;
                 }
             }
@@ -152,18 +90,16 @@ public class MainSuperMarket {
                 break;
             }
         }
-        return codProd;
+        return continuar;
     }
 
-    //Ingresar descripcion del producto
-    public static String ingresarDesc(){
+    //Ingresar descripción del producto
+    public static boolean ingresarDesc(){
 
         Scanner scanner = new Scanner(System.in);
-        Producto producto = new Producto();
         int intentosDesc = 0;
-        //COMENTARIO
 
-        while (continuar){
+        while (res){
             System.out.println("Ingrese descripcion: ");
             String desc = scanner.nextLine();
             producto.setDesc(desc);
@@ -174,18 +110,17 @@ public class MainSuperMarket {
                     intentosDesc += 1;
                     if (intentosDesc == 2) {
                         System.out.println("Ha sobrepasado la cantidad maxima de intentos. ¡Adios!");
-                        continuar = false;
+                        res = false;
                         break;
                     }
                 }else {
-                    continuar = true;
+                    res = true;
                     break;
                 }
             }break;
         }
-
+        return res;
     }
-
 
     //Ingresar precio del producto
     public static boolean ingresarPrecio(){
@@ -194,8 +129,9 @@ public class MainSuperMarket {
         Producto producto = new Producto();
         int intentosPrecio = 0;
         int precioProd = 0;
+        boolean res = ingresarDesc();
 
-        while (continuar) {
+        while (res) {
             System.out.println("Ingrese precio: ");
             String precio = scanner.nextLine();
             producto.setPrecio(precio);
@@ -206,7 +142,7 @@ public class MainSuperMarket {
                     intentosPrecio += 1;
                     if (intentosPrecio == 2) {
                         System.out.println("Ha sobrepasado la cantidad máxima de intentos. ¡Adios!");
-                        continuar = false;
+                        res = false;
                         break;
                     }
                 }
@@ -216,21 +152,38 @@ public class MainSuperMarket {
                 }
             }break;
         }
-
+        return res;
     }
 
-    public static boolean isNumeric(String cod) {
+    public static boolean ingresarCant(){
 
-        boolean res;
+        Scanner scanner = new Scanner(System.in);
+        int cantProd = 0;
+        int intentosCant = 0;
+        boolean res = ingresarPrecio();
 
-        try {
-            Integer.parseInt(cod);
-            res = true;
-        } catch (NumberFormatException ex) {
-            res = false;
+        System.out.println("Ingrese cantidad: ");
+        String cant = scanner.nextLine();
+        while (true){
+            if (cant.isEmpty()) {
+                System.out.println("Debe ingresar una cantidad: ");
+                cant = scanner.nextLine();
+                intentosCant += 1;
+                if (intentosCant == 2) {
+                    System.out.println("Ha sobrepasado la cantidad maxima de intentos. ¡Adios!");
+                    res = false;
+                    break;
+                }
+            }
+            if (isNumeric(cant) == true) {
+                cantProd = Integer.parseInt(cant);
+                break;
+            }
         }
         return res;
     }
+    //Método que valida ingreso numérico
+
 
     public static boolean addProducto(){
 
@@ -253,5 +206,18 @@ public class MainSuperMarket {
             }
         }return res;
 
+    }
+
+    public static boolean isNumeric(String cod) {
+
+        boolean res;
+
+        try {
+            Integer.parseInt(cod);
+            res = true;
+        } catch (NumberFormatException ex) {
+            res = false;
+        }
+        return res;
     }
 }
