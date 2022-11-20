@@ -161,6 +161,7 @@ public class MainSuperMarket {
         Scanner scanner = new Scanner(System.in);
         Producto producto = new Producto();
         int intentosDesc = 0;
+        //COMENTARIO
 
         while (continuar){
             System.out.println("Ingrese descripcion: ");
