@@ -10,7 +10,6 @@ public class MainSuperMarket {
     //public static Producto producto;
     public static ArrayList<Producto> listaProductos = new ArrayList<>();
 
-
     public static void main(String[] args) {
 
         Producto producto = new Producto();
@@ -57,7 +56,6 @@ public class MainSuperMarket {
                 break;
             }
         }
-
     }
 
     //Métodos
