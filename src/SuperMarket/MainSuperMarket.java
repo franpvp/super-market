@@ -1,27 +1,28 @@
 package SuperMarket;
 
-import jdk.nashorn.internal.objects.Global;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MainSuperMarket {
-
-    //public static Producto producto;
     public static ArrayList<Producto> listaProductos = new ArrayList<>();
+    public static Producto producto = new Producto();
 
     public static void main(String[] args) {
 
-        Producto producto = new Producto();
-        //ArrayList<Producto> listaProducts = new ArrayList<>();
-        int numCod = 0;
-        int precioProd = 0;
-        int cantProd = 0;
+        //Ingresar datos del producto
+        ingresarProd();
+    }
 
-        //Ingresar Código
-        boolean continuar = ingresarProd();
-        //Ingreso Descripción
-        //COMENTARIO PRUEBA
+    //Métodos
+    //Ingresar código del producto
+    public static boolean ingresarProd(){
+
+        Scanner scanner = new Scanner(System.in);
+
+        //Ingresar código
+        boolean continuar = ingresarCod();
+
+        //Ingrese descripción
         while (continuar){
             ingresarDesc();
             break;
@@ -36,43 +37,40 @@ public class MainSuperMarket {
             ingresarCant();
             break;
         }
+        //Agregar otro producto
         while (continuar){
-            System.out.println("--- Datos del producto ---");
-            System.out.println("Codigo: " + numCod);
-            System.out.println("Descripcion: " + producto.getDesc());
-            System.out.println("Precio: " + producto.getPrecio());
-            System.out.println("Cantidad: " + cantProd);
-            System.out.println("Total a pagar: " + cantProd*precioProd);
-            break;
-        }
-        while (true){
-            boolean addProd = addProducto();
-            if (addProd){
+            if (addProducto() == true){
                 System.out.println("Agregando nuevo producto");
+                ingresarProd();
+                System.out.println("Mostrando datos del producto agregado");
                 listaProductos.add(producto);
                 System.out.println(listaProductos);
-                break;
-            } else if (!addProd){
+                addProducto();
+            } else {
                 System.out.println("Finalizando el programa");
-                break;
+                System.out.println("--- Datos del producto ---");
+                System.out.println("Codigo: " + producto.getCodProd());
+                System.out.println("Descripcion: " + producto.getDesc());
+                System.out.println("Precio: " + producto.getPrecio());
+                //System.out.println("Cantidad: " + );
+                //System.out.println("Total a pagar: " + cantProd*precioProd);
             }
         }
+        return continuar;
     }
 
-    //Métodos
-    //Ingresar código del producto
-    public static boolean ingresarProd(){
+
+    //Ingresar codigo del producto
+    public static boolean ingresarCod(){
 
         Scanner scanner = new Scanner(System.in);
-        Producto producto = new Producto();
 
         boolean continuar = true;
         int intentosCod = 0;
         int numCod = 0;
 
-        System.out.println("Ingrese un codigo: ");
+        System.out.println("Ingrese un código: ");
         String codProd = scanner.nextLine();
-        producto.setCodProd(codProd);
         while (true){
             if (codProd.isEmpty() && intentosCod != 2) {
                 System.out.println("Debe ingresar un código: ");
@@ -89,6 +87,7 @@ public class MainSuperMarket {
                 break;
             }
         }
+        producto.setCodProd(codProd);
         return continuar;
     }
 
@@ -98,68 +97,57 @@ public class MainSuperMarket {
         Scanner scanner = new Scanner(System.in);
         int intentosDesc = 0;
 
-        while (res){
-            System.out.println("Ingrese descripcion: ");
-            String desc = scanner.nextLine();
-            producto.setDesc(desc);
-            while (true){
-                if (desc.isEmpty()) {
-                    System.out.println("Debe ingresar una descripcion: ");
-                    desc = scanner.nextLine();
-                    intentosDesc += 1;
-                    if (intentosDesc == 2) {
-                        System.out.println("Ha sobrepasado la cantidad maxima de intentos. ¡Adios!");
-                        res = false;
-                        break;
-                    }
-                }else {
-                    res = true;
-                    break;
+        System.out.println("Ingrese descripción: ");
+        String desc = scanner.nextLine();
+        while (true){
+            if (desc.isEmpty()) {
+                System.out.println("Debe ingresar una descripción: ");
+                desc = scanner.nextLine();
+                intentosDesc += 1;
+                if (intentosDesc == 2) {
+                    System.out.println("Ha sobrepasado la cantidad maxima de intentos. ¡Adios!");
+                    return false;
                 }
             }break;
         }
-        return res;
+        producto.setDesc(desc);
+        return true;
     }
 
     //Ingresar precio del producto
     public static boolean ingresarPrecio(){
 
         Scanner scanner = new Scanner(System.in);
-        Producto producto = new Producto();
         int intentosPrecio = 0;
         int precioProd = 0;
-        boolean res = ingresarDesc();
 
-        while (res) {
-            System.out.println("Ingrese precio: ");
-            String precio = scanner.nextLine();
-            producto.setPrecio(precio);
-            while (true) {
-                if (precio.isEmpty()) {
-                    System.out.println("Debe ingresar un precio: ");
-                    precio = scanner.nextLine();
-                    intentosPrecio += 1;
-                    if (intentosPrecio == 2) {
-                        System.out.println("Ha sobrepasado la cantidad máxima de intentos. ¡Adios!");
-                        res = false;
-                        break;
-                    }
+        System.out.println("Ingrese precio: ");
+        String precio = scanner.nextLine();
+
+        while (true) {
+            if (precio.isEmpty()) {
+                System.out.println("Debe ingresar un precio: ");
+                precio = scanner.nextLine();
+                intentosPrecio += 1;
+                if (intentosPrecio == 2) {
+                    System.out.println("Ha sobrepasado la cantidad máxima de intentos. ¡Adios!");
+                    return false;
                 }
-                if (isNumeric(precio) == true) {
-                    precioProd = Integer.parseInt(precio);
-                    break;
-                }
-            }break;
+            }
+            if (isNumeric(precio) == true) {
+                precioProd = Integer.parseInt(precio);
+                break;
+            }
         }
-        return res;
+        producto.setPrecio(precio);
+        return true;
     }
-
+    //Ingresar cantidad de productos
     public static boolean ingresarCant(){
 
         Scanner scanner = new Scanner(System.in);
         int cantProd = 0;
         int intentosCant = 0;
-        boolean res = ingresarPrecio();
 
         System.out.println("Ingrese cantidad: ");
         String cant = scanner.nextLine();
@@ -170,8 +158,7 @@ public class MainSuperMarket {
                 intentosCant += 1;
                 if (intentosCant == 2) {
                     System.out.println("Ha sobrepasado la cantidad maxima de intentos. ¡Adios!");
-                    res = false;
-                    break;
+                    return false;
                 }
             }
             if (isNumeric(cant) == true) {
@@ -179,10 +166,8 @@ public class MainSuperMarket {
                 break;
             }
         }
-        return res;
+        return true;
     }
-    //Método que valida ingreso numérico
-
 
     public static boolean addProducto(){
 
@@ -197,6 +182,7 @@ public class MainSuperMarket {
                 break;
             } else if (consult.equals("no") || consult.equals("NO")){
                res = false;
+               //te amoo cafesito
                break;
             }
             else if (consult.isEmpty()){
@@ -206,7 +192,7 @@ public class MainSuperMarket {
         }return res;
 
     }
-
+    //Método que valida ingreso numérico
     public static boolean isNumeric(String cod) {
 
         boolean res;
