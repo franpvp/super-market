@@ -1,4 +1,7 @@
-package com.westmarket.busines;
+package com.westmarket.ui;
+
+import com.westmarket.busines.Categoria;
+import com.westmarket.busines.Producto;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -158,7 +161,7 @@ public class MainSuperMarket {
         }
         return true;
     }
-
+    //Metodo para ingresar categoria
     public static void ingresarCategoria(){
 
         Scanner scanner = new Scanner(System.in);
@@ -195,7 +198,7 @@ public class MainSuperMarket {
             break;
         }
     }
-    //Ingresar cantidad de productos
+    //Metodo para ingresar stock del producto
     public static boolean ingresarStock(){
 
         Scanner scanner = new Scanner(System.in);
