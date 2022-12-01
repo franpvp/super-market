@@ -16,7 +16,7 @@ public class MainSuperMarket {
         //Mostrar menú principal
         while (true){
             if (!mostrarMenu()){
-                System.out.println("Ha salido del sistema");
+                System.out.println("\nHa salido del sistema");
                 break;
             }
         }
@@ -25,8 +25,8 @@ public class MainSuperMarket {
     public static boolean mostrarMenu(){
 
         Scanner scanner = new Scanner(System.in);
-        boolean continuar = true;
-        while (continuar){
+        boolean val = false;
+        while (true){
             System.out.println("--- West Market ---");
             System.out.println("1. Registrar producto");
             System.out.println("2. Imprimir productos");
@@ -36,6 +36,7 @@ public class MainSuperMarket {
             int op = scanner.nextInt();
             if (op == 1){
                 registrarProd();
+                break;
             } else if (op == 2) {
                 producto.imprimirListado(listaProductos);
             } else if (op == 3) {
@@ -45,13 +46,13 @@ public class MainSuperMarket {
                     System.out.println("El producto no existe");
                 }
             } else if (op == 4) {
-                continuar = false;
+                System.out.println("Ha salido del sistema");
                 break;
             } else {
                 System.out.println("Ingreso inválido\n");
             }
         }
-        return continuar;
+        return val;
     }
     //Métodos
     //Ingresar código del producto
@@ -87,23 +88,21 @@ public class MainSuperMarket {
         Scanner scanner = new Scanner(System.in);
         boolean continuar = true;
         int intentosCod = 0;
-        int numCod = 0;
 
         System.out.println("Ingrese código: ");
         String codProd = scanner.nextLine();
         while (true){
-            if (codProd.isEmpty() && intentosCod != 3) {
+            if (codProd.isEmpty() && intentosCod != 2) {
                 System.out.println("Debe ingresar un código: ");
                 codProd = scanner.nextLine();
                 intentosCod += 1;
-                if (intentosCod == 3) {
-                    System.out.println("Ha sobrepasado la cantidad maxima de intentos. ¡Adios!");
+                if (intentosCod == 2) {
+                    System.out.println("\nHa sobrepasado la cantidad maxima de intentos. ¡Adios!");
                     continuar = false;
                     break;
                 }
             }
-            if (isNumeric(codProd) == true && intentosCod != 3) {
-                numCod = Integer.parseInt(codProd);
+            if (isNumeric(codProd) && intentosCod != 2) {
                 producto.setCod(codProd);
                 break;
             }
@@ -119,11 +118,11 @@ public class MainSuperMarket {
         System.out.println("Ingrese descripción: ");
         String desc = scanner.nextLine();
         while (true){
-            if (desc.isEmpty() && intentosDesc != 3) {
+            if (desc.isEmpty() && intentosDesc != 2) {
                 System.out.println("Debe ingresar una descripción: ");
                 desc = scanner.nextLine();
                 intentosDesc += 1;
-                if (intentosDesc == 3) {
+                if (intentosDesc == 2) {
                     System.out.println("Ha sobrepasado la cantidad maxima de intentos. ¡Adios!");
                     return false;
                 }
@@ -139,29 +138,27 @@ public class MainSuperMarket {
 
         Scanner scanner = new Scanner(System.in);
         int intentosPrecio = 0;
-        int precioProd = 0;
 
         System.out.println("Ingrese precio: ");
         String precio = scanner.nextLine();
         while (true) {
-            if (precio.isEmpty() && intentosPrecio != 3) {
+            if (precio.isEmpty() && intentosPrecio != 2) {
                 System.out.println("Debe ingresar un precio: ");
                 precio = scanner.nextLine();
                 intentosPrecio += 1;
-                if (intentosPrecio == 3) {
-                    System.out.println("Ha sobrepasado la cantidad máxima de intentos. ¡Adios!");
+                if (intentosPrecio == 2) {
+                    System.out.println("\nHa sobrepasado la cantidad máxima de intentos. ¡Adios!");
                     return false;
                 }
             }
-            if (isNumeric(precio) == true && intentosPrecio != 3) {
-                precioProd = Integer.parseInt(precio);
+            if (isNumeric(precio) == true && intentosPrecio != 2) {
                 producto.setPrecio(precio);
                 break;
             }
         }
         return true;
     }
-    //Metodo para ingresar categoria
+    //Método para ingresar categoria
     public static void ingresarCategoria(){
 
         Scanner scanner = new Scanner(System.in);
@@ -192,16 +189,20 @@ public class MainSuperMarket {
             producto.setCategoria(categoria);
             listaProductos.add(producto);
             producto.setListaProductos(producto.getListaProductos());
+            //Vaciando objetos para crear nuevos
+            categoria = new Categoria();
             producto = new Producto();
-            System.out.println("El producto ha sido ingresado");
+            System.out.println("\nEl producto ha sido ingresado");
+            System.out.println(listaProductos);
             mostrarMenu();
             break;
         }
     }
-    //Metodo para ingresar stock del producto
+    //Método para ingresar stock del producto
     public static boolean ingresarStock(){
 
         Scanner scanner = new Scanner(System.in);
+        boolean valido = true;
         int stockProd = 0;
         int intentosStock = 0;
 
@@ -214,7 +215,7 @@ public class MainSuperMarket {
                 intentosStock += 1;
                 if (intentosStock == 3) {
                     System.out.println("Ha sobrepasado la cantidad maxima de intentos. ¡Adios!");
-                    return false;
+                    valido = false;
                 }
             }
             if (isNumeric(stock) == true) {
@@ -223,7 +224,7 @@ public class MainSuperMarket {
             }
         }
         producto.setStock(stock);
-        return true;
+        return valido;
     }
 
     //Método para eliminar un producto de la listaProductos
@@ -262,4 +263,7 @@ public class MainSuperMarket {
         }
         return res;
     }
+
+
+
 }

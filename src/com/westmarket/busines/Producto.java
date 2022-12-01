@@ -70,8 +70,6 @@ public class Producto {
         this.listaProductos = listaProductos;
     }
     //Metodo que imprime el codigo, descripcion, precio, stock, categoria de los productos
-
-
     public void imprimirListado(ArrayList<Producto> listaProductos){
 
         System.out.println("--- Listado de productos ---");
