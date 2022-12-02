@@ -56,37 +56,43 @@ public class MainSuperMarket {
     }
     //Métodos
     //Ingresar código del producto
-    public static boolean registrarProd(){
+    public static void registrarProd(){
 
+        Scanner scanner = new Scanner(System.in);
         //Ingresar código
-        boolean continuar = ingresarCod();
+        boolean valCod = ingresarCod();
         //Ingresar descripción
-        while (continuar){
-            ingresarDesc();
-            break;
-        }
+        boolean valDesc = ingresarDesc();
         //Ingresar precio
-        while (continuar) {
-            ingresarPrecio();
-            break;
-        }
+        boolean valPrecio = ingresarPrecio();
         //Ingresar stock
-        while (continuar){
-            ingresarStock();
-            break;
-        }
+        boolean valStock = ingresarStock();
         //Ingresar categoría del producto
-        while (continuar){
-            ingresarCategoria();
-            break;
+        boolean valCat = ingresarCategoria();
+        while (true){
+            if (valCod && valDesc && valPrecio && valStock && valCat){
+                System.out.println("¿Volver al menu? (si/no)");
+                String opcion = scanner.nextLine();
+                if (opcion.equals("si") || opcion.equals("SI")){
+                    mostrarMenu();
+                    break;
+                } else if (opcion.equals("no") || opcion.equals("NO")){
+                    break;
+                } else {
+                    System.out.println("Ingreso inválido");
+                    mostrarMenu();
+                }
+            }
         }
-        return continuar;
+
+
+
     }
     //Ingresar código del producto
     public static boolean ingresarCod(){
 
         Scanner scanner = new Scanner(System.in);
-        boolean continuar = true;
+        boolean val = true;
         int intentosCod = 0;
 
         System.out.println("Ingrese código: ");
@@ -98,7 +104,7 @@ public class MainSuperMarket {
                 intentosCod += 1;
                 if (intentosCod == 2) {
                     System.out.println("\nHa sobrepasado la cantidad maxima de intentos. ¡Adios!");
-                    continuar = false;
+                    val = false;
                     break;
                 }
             }
@@ -107,12 +113,13 @@ public class MainSuperMarket {
                 break;
             }
         }
-        return continuar;
+        return val;
     }
     //Ingresar descripción del producto
     public static boolean ingresarDesc(){
 
         Scanner scanner = new Scanner(System.in);
+        boolean val = true;
         int intentosDesc = 0;
 
         System.out.println("Ingrese descripción: ");
@@ -124,19 +131,21 @@ public class MainSuperMarket {
                 intentosDesc += 1;
                 if (intentosDesc == 2) {
                     System.out.println("Ha sobrepasado la cantidad maxima de intentos. ¡Adios!");
-                    return false;
+                    val = false;
+                    break;
                 }
             } else {
                 producto.setDesc(desc);
                 break;
             }
         }
-        return true;
+        return val;
     }
     //Ingresar precio del producto
     public static boolean ingresarPrecio(){
 
         Scanner scanner = new Scanner(System.in);
+        boolean val = true;
         int intentosPrecio = 0;
 
         System.out.println("Ingrese precio: ");
@@ -148,7 +157,8 @@ public class MainSuperMarket {
                 intentosPrecio += 1;
                 if (intentosPrecio == 2) {
                     System.out.println("\nHa sobrepasado la cantidad máxima de intentos. ¡Adios!");
-                    return false;
+                    val = false;
+                    break;
                 }
             }
             if (isNumeric(precio) == true && intentosPrecio != 2) {
@@ -156,35 +166,60 @@ public class MainSuperMarket {
                 break;
             }
         }
-        return true;
+        return val;
     }
     //Método para ingresar categoria
-    public static void ingresarCategoria(){
+    public static boolean ingresarCategoria(){
 
         Scanner scanner = new Scanner(System.in);
+        int intentosCat = 0;
+        boolean val = true;
         System.out.println("Categorías");
         System.out.println("\t1. Bebidas");
         System.out.println("\t2. Congelados");
         System.out.println("\t3. Lácteos");
         System.out.println("\t4. Aseo");
+
         while (true){
             System.out.println("Asigne una categoría al producto: ");
-            int opcion = scanner.nextInt();
-            if (opcion == 1){
+            String opcion = scanner.nextLine();
+            if (opcion.equals("1")){
                 categoria.setCodCat(1);
                 categoria.setNombreCat("Bebidas");
-            } else if (opcion == 2) {
+            } else if (opcion.equals("2")) {
                 categoria.setCodCat(2);
                 categoria.setNombreCat("Congelados");
-            } else if (opcion == 3) {
+            } else if (opcion.equals("3")) {
                 categoria.setCodCat(3);
                 categoria.setNombreCat("Lácteos");
-            } else if (opcion == 4) {
+            } else if (opcion.equals("4")) {
                 categoria.setCodCat(4);
                 categoria.setNombreCat("Aseo");
             } else {
-                System.out.println("Ingreso inválido");
+                if (intentosCat != 2){
+                    System.out.println("Debe ingresar una categoría: ");
+                    opcion = scanner.nextLine();
+                    intentosCat += 1;
+                    if (intentosCat == 2) {
+                        System.out.println("\nHa sobrepasado la cantidad máxima de intentos. ¡Adios!");
+                        val = false;
+                        break;
+                    }
+                }
                 continue;
+            }
+            if (opcion.isEmpty() && intentosCat != 2) {
+                System.out.println("Debe ingresar una categoría: ");
+                opcion = scanner.nextLine();
+                intentosCat += 1;
+                if (intentosCat == 2) {
+                    System.out.println("\nHa sobrepasado la cantidad máxima de intentos. ¡Adios!");
+                    val = false;
+                    break;
+                }
+            }
+            if (isNumeric(opcion) && intentosCat != 2) {
+                break;
             }
             producto.setCategoria(categoria);
             listaProductos.add(producto);
@@ -197,6 +232,8 @@ public class MainSuperMarket {
             mostrarMenu();
             break;
         }
+        return val;
+
     }
     //Método para ingresar stock del producto
     public static boolean ingresarStock(){
